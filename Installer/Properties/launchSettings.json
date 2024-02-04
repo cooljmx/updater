@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Installer": {
+      "commandName": "Project",
+      "commandLineArgs": "swap -1 e:\\temp\\upd_folder"
+    }
+  }
+}
