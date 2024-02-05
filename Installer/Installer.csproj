@@ -13,9 +13,4 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\Swap\" />
-    <Folder Include="Environment\" />
-  </ItemGroup>
-
 </Project>

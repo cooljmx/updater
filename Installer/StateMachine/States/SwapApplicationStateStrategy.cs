@@ -1,15 +1,21 @@
-﻿using System.Diagnostics;
-using Installer.Environment;
+﻿using Installer.Environment;
 
 namespace Installer.StateMachine.States;
 
 internal class SwapApplicationStateStrategy : BaseApplicationStateStrategy
 {
+    private readonly IApplicationContext _applicationContext;
+    private readonly IApplicationStateTransition _applicationStateTransition;
     private readonly ICommandLineArgumentProvider _commandLineArgumentProvider;
 
-    public SwapApplicationStateStrategy(ICommandLineArgumentProvider commandLineArgumentProvider)
+    public SwapApplicationStateStrategy(
+        ICommandLineArgumentProvider commandLineArgumentProvider,
+        IApplicationContext applicationContext,
+        IApplicationStateTransition applicationStateTransition)
     {
         _commandLineArgumentProvider = commandLineArgumentProvider;
+        _applicationContext = applicationContext;
+        _applicationStateTransition = applicationStateTransition;
     }
 
     public override ApplicationState State => ApplicationState.Swap;
@@ -30,20 +36,9 @@ internal class SwapApplicationStateStrategy : BaseApplicationStateStrategy
         if (!int.TryParse(processIdValue, out var processId))
             throw new InvalidOperationException();
 
-        try
-        {
-            var process = Process.GetProcessById(processId);
+        _applicationContext.SetValue("processId", processId);
+        _applicationContext.SetValue("targetPath", targetPath);
 
-            process.WaitForExit(TimeSpan.FromSeconds(5));
-        }
-        catch (ArgumentException _)
-        {
-        }
-
-        var sourceFileName = GetType().Assembly.Location;
-        var targetFileName = Path.Combine(targetPath, Path.GetFileName(sourceFileName));
-
-        File.Delete(targetFileName);
-        File.Copy(sourceFileName, targetFileName);
+        _applicationStateTransition.MoveTo(ApplicationState.WaitingProcessFinished);
     }
 }

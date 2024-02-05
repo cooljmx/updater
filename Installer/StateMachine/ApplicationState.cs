@@ -4,5 +4,7 @@ internal enum ApplicationState
 {
     Created,
     Started,
-    Swap
+    Swap,
+    WaitingProcessFinished,
+    CopyingToTarget
 }
