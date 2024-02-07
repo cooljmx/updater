@@ -2,5 +2,5 @@
 
 internal enum Command
 {
-    Swap
+    Swap,
 }

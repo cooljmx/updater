@@ -22,6 +22,7 @@ public class AutofacModule : Module
             .As<IApplicationStateMachine>()
             .SingleInstance()
             .ExternallyOwned();
+
         builder.RegisterType<ApplicationStateTransition>().As<IApplicationStateTransition>().SingleInstance();
         builder.RegisterType<ApplicationContext>().As<IApplicationContext>().SingleInstance();
         builder.RegisterType<ApplicationStateStrategyFactory>().As<IApplicationStateStrategyFactory>().SingleInstance();
@@ -29,9 +30,12 @@ public class AutofacModule : Module
         builder.RegisterType<CreatedApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<StartedApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<SwapApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
-        builder.RegisterType<WaitingProcessFinishedApplicationStateStrategy>().As<IApplicationStateStrategy>()
+        builder.RegisterType<WaitingProcessFinishedApplicationStateStrategy>()
+            .As<IApplicationStateStrategy>()
             .InstancePerDependency();
-        builder.RegisterType<CopyingToTargetApplicationStateStrategy>().As<IApplicationStateStrategy>()
+
+        builder.RegisterType<CopyingToTargetApplicationStateStrategy>()
+            .As<IApplicationStateStrategy>()
             .InstancePerDependency();
     }
 }

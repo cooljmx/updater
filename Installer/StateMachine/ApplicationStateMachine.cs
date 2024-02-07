@@ -17,16 +17,16 @@ internal class ApplicationStateMachine : IApplicationStateMachine
         _currentStateStrategy.Enter();
     }
 
-    public void Dispose()
-    {
-        _applicationStateTransition.MovedToState -= OnMovedToState;
-    }
-
     private void OnMovedToState(IApplicationStateStrategy strategy)
     {
         _currentStateStrategy.Exit();
 
         _currentStateStrategy = strategy;
         _currentStateStrategy.Enter();
+    }
+
+    public void Dispose()
+    {
+        _applicationStateTransition.MovedToState -= OnMovedToState;
     }
 }

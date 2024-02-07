@@ -6,5 +6,5 @@ internal enum ApplicationState
     Started,
     Swap,
     WaitingProcessFinished,
-    CopyingToTarget
+    CopyingToTarget,
 }
