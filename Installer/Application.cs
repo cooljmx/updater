@@ -1,27 +1,35 @@
-﻿using Installer.StateMachine;
+﻿using Installer.Downloading.Abstract;
+using Installer.StateMachine;
 
 namespace Installer;
 
-internal sealed class Application : IApplication, IDisposable
+internal sealed class Application : IApplication
 {
     private readonly IApplicationStateMachine _applicationStateMachine;
     private readonly IApplicationStateTransition _applicationStateTransition;
+    private readonly IThreadPool _threadPool;
 
     public Application(
         IApplicationStateTransition applicationStateTransition,
-        IApplicationStateMachine applicationStateMachine)
+        IApplicationStateMachine applicationStateMachine,
+        IThreadPool threadPool)
     {
         _applicationStateTransition = applicationStateTransition;
         _applicationStateMachine = applicationStateMachine;
+        _threadPool = threadPool;
     }
 
-    public void Start()
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        _applicationStateTransition.MoveTo(ApplicationState.Started);
+        _threadPool.ExecuteAsync(() => _applicationStateTransition.MoveTo(ApplicationState.Started), CancellationToken.None);
+
+        return Task.CompletedTask;
     }
 
-    public void Dispose()
+    public Task StopAsync(CancellationToken cancellationToken)
     {
         _applicationStateMachine.Dispose();
+
+        return Task.CompletedTask;
     }
 }

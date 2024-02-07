@@ -1,6 +1,7 @@
-﻿namespace Installer;
+﻿using Microsoft.Extensions.Hosting;
 
-internal interface IApplication
+namespace Installer;
+
+internal interface IApplication : IHostedService
 {
-    void Start();
 }
