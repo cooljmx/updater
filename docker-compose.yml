@@ -1,0 +1,10 @@
+services:
+  launcher.server:
+    image: launcher.server:1.0.0
+    build:
+        context: Application
+        dockerfile: Launcher.Server/Dockerfile
+    ports:
+        - "50001:8080"
+    volumes:
+        - ./data:/app/data
