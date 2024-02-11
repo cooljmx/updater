@@ -1,9 +1,10 @@
-﻿using Launcher.Commands;
+﻿using Launcher.Abstraction.StateMachine;
+using Launcher.Commands;
 using Launcher.Downloading.Scheduler;
 
 namespace Launcher.StateMachine.States;
 
-internal class StartedApplicationStateStrategy : BaseApplicationStateStrategy
+internal class StartedApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
 {
     private readonly IApplicationStateTransition _applicationStateTransition;
     private readonly ICommandProvider _commandProvider;
@@ -21,7 +22,7 @@ internal class StartedApplicationStateStrategy : BaseApplicationStateStrategy
 
     public override ApplicationState State => ApplicationState.Started;
 
-    protected override void DoEnter()
+    protected override Task DoEnterAsync()
     {
         //switch (_commandProvider.Get())
         //{
@@ -36,5 +37,7 @@ internal class StartedApplicationStateStrategy : BaseApplicationStateStrategy
             new Uri("https://downloads.wdc.com/wdapp/Install_WD_Discovery_for_Windows.zip"),
             "E:\\temp\\7\\Install_WD_Discovery_for_Windows.zip",
             "1f4519a4df91f0caee835538c0664dda82bb5f5848440d90bc83be4a98469f3b");
+
+        return Task.CompletedTask;
     }
 }

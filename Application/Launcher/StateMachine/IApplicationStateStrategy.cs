@@ -1,10 +1,7 @@
-﻿namespace Launcher.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
-internal interface IApplicationStateStrategy
+namespace Launcher.StateMachine;
+
+internal interface IApplicationStateStrategy : IStateStrategy<ApplicationState>
 {
-    ApplicationState State { get; }
-
-    void Enter();
-
-    void Exit();
 }

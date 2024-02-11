@@ -1,4 +1,4 @@
-﻿namespace Launcher.Environment;
+﻿namespace Launcher.Common.Environment;
 
 internal class CommandLineArgumentProvider : ICommandLineArgumentProvider
 {

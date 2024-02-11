@@ -1,4 +1,4 @@
-﻿using Launcher.Downloading.Abstract.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
 namespace Launcher.Downloading.StateMachine;
 

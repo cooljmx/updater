@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Launcher.Common\Launcher.Common.csproj" />
     <ProjectReference Include="..\Launcher.Downloading\Launcher.Downloading.csproj" />
+    <ProjectReference Include="..\Launcher.Metadata\Launcher.Metadata.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,6 +13,8 @@ builder.ConfigureContainer(
         {
             containerBuilder.RegisterModule<AutofacModule>();
             containerBuilder.RegisterModule<Launcher.Downloading.AutofacModule>();
+            containerBuilder.RegisterModule<Launcher.Metadata.AutofacModule>();
+            containerBuilder.RegisterModule<Launcher.Common.AutofacModule>();
         }));
 
 builder.Services.AddHostedService(serviceProvider => serviceProvider.GetRequiredService<IDownloadingBackgroundService>());

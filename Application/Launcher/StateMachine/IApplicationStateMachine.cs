@@ -1,5 +1,7 @@
-﻿namespace Launcher.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
-internal interface IApplicationStateMachine : IDisposable
+namespace Launcher.StateMachine;
+
+internal interface IApplicationStateMachine : IStateMachine<ApplicationState>
 {
 }

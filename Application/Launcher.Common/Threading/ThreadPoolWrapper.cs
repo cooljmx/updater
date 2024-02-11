@@ -1,4 +1,6 @@
-﻿namespace Launcher.Downloading.Abstract;
+﻿using Launcher.Abstraction.StateMachine;
+
+namespace Launcher.Common.Threading;
 
 internal class ThreadPoolWrapper : IThreadPool
 {

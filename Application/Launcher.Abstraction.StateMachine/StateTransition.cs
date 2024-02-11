@@ -1,8 +1,9 @@
-﻿namespace Launcher.Downloading.Abstract.StateMachine;
+﻿namespace Launcher.Abstraction.StateMachine;
 
-public abstract class StateTransition<TState, TStateStrategyFactory> : IStateTransition<TState>
+public abstract class StateTransition<TState, TStateStrategy, TStateStrategyFactory> : IStateTransition<TState, TStateStrategy>
     where TState : notnull
-    where TStateStrategyFactory : IStateStrategyFactory<TState>
+    where TStateStrategy : IStateStrategy<TState>
+    where TStateStrategyFactory : IStateStrategyFactory<TState, TStateStrategy>
 {
     private readonly Lazy<TStateStrategyFactory> _stateStrategyLazyFactory;
 
@@ -18,5 +19,5 @@ public abstract class StateTransition<TState, TStateStrategyFactory> : IStateTra
         MovedToState?.Invoke(strategy);
     }
 
-    public event Action<IStateStrategy<TState>>? MovedToState;
+    public event Action<TStateStrategy>? MovedToState;
 }

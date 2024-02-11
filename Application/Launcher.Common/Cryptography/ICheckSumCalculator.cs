@@ -1,4 +1,4 @@
-﻿namespace Launcher.Downloading;
+﻿namespace Launcher.Common.Cryptography;
 
 public interface ICheckSumCalculator
 {

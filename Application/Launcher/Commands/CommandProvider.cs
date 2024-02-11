@@ -1,4 +1,4 @@
-﻿using Launcher.Environment;
+﻿using Launcher.Common.Environment;
 
 namespace Launcher.Commands;
 

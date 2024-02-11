@@ -1,4 +1,5 @@
-﻿using Launcher.Downloading.Abstract.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
+using Launcher.Common.Cryptography;
 
 namespace Launcher.Downloading.StateMachine.States;
 

@@ -10,9 +10,7 @@ public class AutofacModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterType<ThreadPoolWrapper>().As<IThreadPool>().SingleInstance();
         builder.RegisterType<ScopeRepository>().As<IScopeRepository>().SingleInstance();
-        builder.RegisterType<CheckSumCalculator>().As<ICheckSumCalculator>().SingleInstance();
 
         builder.RegisterType<DownloadingStateStrategyFactory>().As<IDownloadingStateStrategyFactory>().InstancePerLifetimeScope();
         builder.RegisterType<DownloadingStateTransition>().As<IDownloadingStateTransition>().InstancePerLifetimeScope();

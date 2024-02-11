@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Launcher.Abstraction.StateMachine\Launcher.Abstraction.StateMachine.csproj" />
+    <ProjectReference Include="..\Launcher.Common\Launcher.Common.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,8 @@
-﻿namespace Launcher.StateMachine.States;
+﻿using Launcher.Abstraction.StateMachine;
 
-internal class CreatedApplicationStateStrategy : BaseApplicationStateStrategy
+namespace Launcher.StateMachine.States;
+
+internal class CreatedApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
 {
     public override ApplicationState State => ApplicationState.Created;
 }

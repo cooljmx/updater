@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
+using Launcher.Abstraction.StateMachine;
 
 namespace Launcher.StateMachine.States;
 
-internal class WaitingProcessFinishedApplicationStateStrategy : BaseApplicationStateStrategy
+internal class WaitingProcessFinishedApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
 {
     private readonly IApplicationContext _applicationContext;
     private readonly IApplicationStateTransition _applicationStateTransition;
@@ -17,18 +18,25 @@ internal class WaitingProcessFinishedApplicationStateStrategy : BaseApplicationS
 
     public override ApplicationState State => ApplicationState.WaitingProcessFinished;
 
-    protected override void DoEnter()
+    protected override async Task DoEnterAsync()
     {
         var processId = _applicationContext.GetValue<int>("processId");
+
+        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
         try
         {
             var process = Process.GetProcessById(processId);
 
-            process.WaitForExit(TimeSpan.FromSeconds(5));
+            await process.WaitForExitAsync(cancellationTokenSource.Token);
         }
         catch (ArgumentException _)
         {
+        }
+        finally
+        {
+            await cancellationTokenSource.CancelAsync();
+            cancellationTokenSource.Dispose();
         }
 
         _applicationStateTransition.MoveTo(ApplicationState.CopyingToTarget);

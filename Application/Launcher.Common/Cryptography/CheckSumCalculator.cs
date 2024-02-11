@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Launcher.Downloading;
+namespace Launcher.Common.Cryptography;
 
 internal class CheckSumCalculator : ICheckSumCalculator
 {

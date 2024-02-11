@@ -1,8 +1,9 @@
-﻿using Launcher.Metadata;
+﻿using Launcher.Abstraction.StateMachine;
+using Launcher.Metadata;
 
 namespace Launcher.StateMachine.States;
 
-internal class CopyingToTargetApplicationStateStrategy : BaseApplicationStateStrategy
+internal class CopyingToTargetApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
 {
     private readonly IApplicationContext _applicationContext;
     private readonly IMetadataProvider _metadataProvider;
@@ -17,9 +18,9 @@ internal class CopyingToTargetApplicationStateStrategy : BaseApplicationStateStr
 
     public override ApplicationState State => ApplicationState.CopyingToTarget;
 
-    protected override void DoEnter()
+    protected override Task DoEnterAsync()
     {
-        var currentDirectory = System.Environment.CurrentDirectory;
+        var currentDirectory = Environment.CurrentDirectory;
         var metadata = _metadataProvider.Get(Path.Combine(currentDirectory, "metadata.json"));
         var targetPath = _applicationContext.GetValue<string>("targetPath");
 
@@ -31,6 +32,8 @@ internal class CopyingToTargetApplicationStateStrategy : BaseApplicationStateStr
 
             FileDeepCopy(relativeFileName, currentDirectory, targetPath);
         }
+
+        return Task.CompletedTask;
     }
 
     private static void FileDeepCopy(string fileName, string sourceDirectory, string targetDirectory)

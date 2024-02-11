@@ -1,6 +1,7 @@
-﻿namespace Launcher.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
-internal interface IApplicationStateStrategyFactory
+namespace Launcher.StateMachine;
+
+internal interface IApplicationStateStrategyFactory : IStateStrategyFactory<ApplicationState, IApplicationStateStrategy>
 {
-    IApplicationStateStrategy Create(ApplicationState state);
 }

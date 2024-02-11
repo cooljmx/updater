@@ -1,32 +1,18 @@
-﻿namespace Launcher.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
-internal class ApplicationStateMachine : IApplicationStateMachine
+namespace Launcher.StateMachine;
+
+internal class ApplicationStateMachine : StateMachine<ApplicationState, IApplicationStateStrategy>, IApplicationStateMachine
 {
-    private readonly IApplicationStateTransition _applicationStateTransition;
-    private IApplicationStateStrategy _currentStateStrategy;
-
     public ApplicationStateMachine(
         IApplicationStateTransition applicationStateTransition,
-        IApplicationStateStrategyFactory applicationStateStrategyFactory)
+        IApplicationStateStrategyFactory applicationStateStrategyFactory,
+        IThreadPool threadPool)
+        : base(
+            ApplicationState.Created,
+            applicationStateTransition,
+            applicationStateStrategyFactory,
+            threadPool)
     {
-        _applicationStateTransition = applicationStateTransition;
-
-        _applicationStateTransition.MovedToState += OnMovedToState;
-
-        _currentStateStrategy = applicationStateStrategyFactory.Create(ApplicationState.Created);
-        _currentStateStrategy.Enter();
-    }
-
-    private void OnMovedToState(IApplicationStateStrategy strategy)
-    {
-        _currentStateStrategy.Exit();
-
-        _currentStateStrategy = strategy;
-        _currentStateStrategy.Enter();
-    }
-
-    public void Dispose()
-    {
-        _applicationStateTransition.MovedToState -= OnMovedToState;
     }
 }

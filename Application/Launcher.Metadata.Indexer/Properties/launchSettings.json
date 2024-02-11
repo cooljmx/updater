@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Launcher.Metadata.Indexer": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\sources\\updater\\data\\1FF12BA1-0671-42DE-9FDF-941504E225D5"
+    }
+  }
+}

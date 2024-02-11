@@ -1,7 +1,5 @@
 ﻿using Autofac;
 using Launcher.Commands;
-using Launcher.Environment;
-using Launcher.Metadata;
 using Launcher.StateMachine;
 using Launcher.StateMachine.States;
 
@@ -14,9 +12,7 @@ public class AutofacModule : Module
         base.Load(builder);
 
         builder.RegisterType<Application>().As<IApplication>().SingleInstance();
-        builder.RegisterType<CommandLineArgumentProvider>().As<ICommandLineArgumentProvider>().SingleInstance();
         builder.RegisterType<CommandProvider>().As<ICommandProvider>().SingleInstance();
-        builder.RegisterType<MetadataProvider>().As<IMetadataProvider>().SingleInstance();
 
         builder.RegisterType<ApplicationStateMachine>()
             .As<IApplicationStateMachine>()

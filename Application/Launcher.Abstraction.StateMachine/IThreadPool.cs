@@ -1,4 +1,4 @@
-﻿namespace Launcher.Downloading.Abstract;
+﻿namespace Launcher.Abstraction.StateMachine;
 
 public interface IThreadPool
 {

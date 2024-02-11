@@ -1,7 +1,7 @@
-﻿using Launcher.Downloading.Abstract.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
 namespace Launcher.Downloading.StateMachine;
 
-internal interface IDownloadingStateTransition : IStateTransition<DownloadingState>
+internal interface IDownloadingStateTransition : IStateTransition<DownloadingState, IDownloadingStateStrategy>
 {
 }

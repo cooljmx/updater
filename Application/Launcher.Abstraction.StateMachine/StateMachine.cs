@@ -1,15 +1,16 @@
-﻿namespace Launcher.Downloading.Abstract.StateMachine;
+﻿namespace Launcher.Abstraction.StateMachine;
 
-public abstract class StateMachine<TState>
+public abstract class StateMachine<TState, TStateStrategy> : IStateMachine<TState>
     where TState : notnull
+    where TStateStrategy : IStateStrategy<TState>
 {
-    private readonly IStateTransition<TState> _stateTransition;
+    private readonly IStateTransition<TState, TStateStrategy> _stateTransition;
     private IStateStrategy<TState> _currentStateStrategy;
 
     protected StateMachine(
         TState initialState,
-        IStateTransition<TState> stateTransition,
-        IStateStrategyFactory<TState> stateStrategyFactory,
+        IStateTransition<TState, TStateStrategy> stateTransition,
+        IStateStrategyFactory<TState, TStateStrategy> stateStrategyFactory,
         IThreadPool threadPool)
     {
         _stateTransition = stateTransition;
@@ -20,7 +21,7 @@ public abstract class StateMachine<TState>
         threadPool.ExecuteAsync(_currentStateStrategy.EnterAsync, CancellationToken.None);
     }
 
-    private async void OnMovedToState(IStateStrategy<TState> strategy)
+    private async void OnMovedToState(TStateStrategy strategy)
     {
         try
         {

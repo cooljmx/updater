@@ -1,8 +1,9 @@
-﻿using Launcher.Environment;
+﻿using Launcher.Abstraction.StateMachine;
+using Launcher.Common.Environment;
 
 namespace Launcher.StateMachine.States;
 
-internal class SwapApplicationStateStrategy : BaseApplicationStateStrategy
+internal class SwapApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
 {
     private readonly IApplicationContext _applicationContext;
     private readonly IApplicationStateTransition _applicationStateTransition;
@@ -20,7 +21,7 @@ internal class SwapApplicationStateStrategy : BaseApplicationStateStrategy
 
     public override ApplicationState State => ApplicationState.Swap;
 
-    protected override void DoEnter()
+    protected override Task DoEnterAsync()
     {
         var arguments = _commandLineArgumentProvider.Get();
 
@@ -40,5 +41,7 @@ internal class SwapApplicationStateStrategy : BaseApplicationStateStrategy
         _applicationContext.SetValue("targetPath", targetPath);
 
         _applicationStateTransition.MoveTo(ApplicationState.WaitingProcessFinished);
+
+        return Task.CompletedTask;
     }
 }

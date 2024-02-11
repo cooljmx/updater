@@ -1,9 +1,8 @@
-﻿using Launcher.Downloading.Abstract;
-using Launcher.Downloading.Abstract.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
 namespace Launcher.Downloading.StateMachine;
 
-internal class DownloadingStateMachine : StateMachine<DownloadingState>, IDownloadingStateMachine
+internal class DownloadingStateMachine : StateMachine<DownloadingState, IDownloadingStateStrategy>, IDownloadingStateMachine
 {
     public DownloadingStateMachine(
         IDownloadingStateTransition stateTransition,

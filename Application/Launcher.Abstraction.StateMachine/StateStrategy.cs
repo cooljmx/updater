@@ -1,4 +1,4 @@
-﻿namespace Launcher.Downloading.Abstract.StateMachine;
+﻿namespace Launcher.Abstraction.StateMachine;
 
 public abstract class StateStrategy<TState> : IStateStrategy<TState>
     where TState : notnull

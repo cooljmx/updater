@@ -1,8 +1,7 @@
-﻿namespace Launcher.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
-internal interface IApplicationStateTransition
+namespace Launcher.StateMachine;
+
+internal interface IApplicationStateTransition : IStateTransition<ApplicationState, IApplicationStateStrategy>
 {
-    void MoveTo(ApplicationState state);
-
-    event Action<IApplicationStateStrategy>? MovedToState;
 }
