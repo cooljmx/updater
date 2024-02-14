@@ -1,20 +1,12 @@
-﻿namespace Launcher.StateMachine;
+﻿using Launcher.Abstraction.StateMachine;
 
-internal class ApplicationStateTransition : IApplicationStateTransition
+namespace Launcher.StateMachine;
+
+internal class ApplicationStateTransition : StateTransition<ApplicationState, IApplicationStateStrategy, IApplicationStateStrategyFactory>,
+    IApplicationStateTransition
 {
-    private readonly Lazy<IApplicationStateStrategyFactory> _applicationStateStrategyLazyFactory;
-
-    public ApplicationStateTransition(Lazy<IApplicationStateStrategyFactory> applicationStateStrategyLazyFactory)
+    public ApplicationStateTransition(Lazy<IApplicationStateStrategyFactory> stateStrategyLazyFactory)
+        : base(stateStrategyLazyFactory)
     {
-        _applicationStateStrategyLazyFactory = applicationStateStrategyLazyFactory;
     }
-
-    public void MoveTo(ApplicationState state)
-    {
-        var strategy = _applicationStateStrategyLazyFactory.Value.Create(state);
-
-        MovedToState?.Invoke(strategy);
-    }
-
-    public event Action<IApplicationStateStrategy>? MovedToState;
 }
