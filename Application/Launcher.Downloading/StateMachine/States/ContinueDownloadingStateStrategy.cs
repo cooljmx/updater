@@ -4,25 +4,28 @@ namespace Launcher.Downloading.StateMachine.States;
 
 internal class ContinueDownloadingStateStrategy : StateStrategy<DownloadingState>, IDownloadingStateStrategy
 {
-    private const long MaxBufferSize = 64 * 1024L;
+    private const long MaxBufferSize = 4 * 1024 * 1024L;
     private readonly IDownloadFileMetadataService _downloadFileMetadataService;
     private readonly IDownloadingContextProvider _downloadingContextProvider;
     private readonly IDownloadingContextUpdater _downloadingContextUpdater;
     private readonly IDownloadingStateTransition _downloadingStateTransition;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IThreadPool _threadPool;
 
     public ContinueDownloadingStateStrategy(
         IDownloadingContextProvider downloadingContextProvider,
         IDownloadingContextUpdater downloadingContextUpdater,
         IHttpClientFactory httpClientFactory,
         IDownloadFileMetadataService downloadFileMetadataService,
-        IDownloadingStateTransition downloadingStateTransition)
+        IDownloadingStateTransition downloadingStateTransition,
+        IThreadPool threadPool)
     {
         _downloadingContextProvider = downloadingContextProvider;
         _downloadingContextUpdater = downloadingContextUpdater;
         _httpClientFactory = httpClientFactory;
         _downloadFileMetadataService = downloadFileMetadataService;
         _downloadingStateTransition = downloadingStateTransition;
+        _threadPool = threadPool;
     }
 
     public override DownloadingState State => DownloadingState.Continue;
@@ -49,6 +52,7 @@ internal class ContinueDownloadingStateStrategy : StateStrategy<DownloadingState
         var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
         await using var fileStream = File.OpenWrite(targetPath);
+
         fileStream.Seek(downloadedSize, SeekOrigin.Begin);
 
         await httpResponseMessage.Content.CopyToAsync(fileStream);
@@ -62,6 +66,6 @@ internal class ContinueDownloadingStateStrategy : StateStrategy<DownloadingState
         if (finalSize == downloadedSize)
             _downloadingStateTransition.MoveTo(DownloadingState.Completed);
         else
-            _downloadingStateTransition.MoveTo(DownloadingState.Continue);
+            _threadPool.ExecuteAsync(() => _downloadingStateTransition.MoveTo(DownloadingState.Continue), CancellationToken.None);
     }
 }

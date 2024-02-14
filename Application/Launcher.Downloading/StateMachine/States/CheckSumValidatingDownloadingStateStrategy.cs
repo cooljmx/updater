@@ -24,9 +24,10 @@ internal class CheckSumValidatingDownloadingStateStrategy : StateStrategy<Downlo
     protected override async Task DoEnterAsync()
     {
         var targetPath = _downloadingContextProvider.GetValue<string>("targetPath");
+        var metadataFileName = _downloadingContextProvider.GetValue<string>("metadataFileName");
         var expectedCheckSum = _downloadingContextProvider.GetValue<string>("checkSum");
 
-        if (File.Exists(targetPath))
+        if (File.Exists(targetPath) && !File.Exists(metadataFileName))
         {
             var checkSum = await _checkSumCalculator.CalculateAsync(targetPath);
 
