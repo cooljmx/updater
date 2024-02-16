@@ -30,7 +30,7 @@ internal class WaitingProcessFinishedApplicationStateStrategy : StateStrategy<Ap
 
             await process.WaitForExitAsync(cancellationTokenSource.Token);
         }
-        catch (ArgumentException _)
+        catch (ArgumentException)
         {
         }
         finally

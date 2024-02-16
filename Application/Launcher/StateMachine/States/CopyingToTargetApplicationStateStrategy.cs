@@ -20,7 +20,7 @@ internal class CopyingToTargetApplicationStateStrategy : StateStrategy<Applicati
 
     protected override async Task DoEnterAsync()
     {
-        var currentDirectory = System.Environment.CurrentDirectory;
+        var currentDirectory = AppContext.BaseDirectory;
         var metadata = await _localMetadataProvider.GetAsync(Path.Combine(currentDirectory, "metadata.json"));
         var targetPath = _applicationContext.GetValue<string>("targetPath");
 
@@ -47,6 +47,6 @@ internal class CopyingToTargetApplicationStateStrategy : StateStrategy<Applicati
         if (!Directory.Exists(targetFileDirectory) && targetFileDirectory is not null)
             Directory.CreateDirectory(targetFileDirectory);
 
-        File.Copy(sourceFileName, targetFileName);
+        File.Copy(sourceFileName, targetFileName, true);
     }
 }

@@ -25,10 +25,8 @@ internal class SwapStartingApplicationStateStrategy : StateStrategy<ApplicationS
         var launcherPath = Path.Combine(temporaryFolder, "launcher.exe");
 
         var currentProcess = Process.GetCurrentProcess();
-        var currentAssemblyFileName = GetType().Assembly.Location;
-        var currentProcessPath = Path.GetDirectoryName(currentAssemblyFileName);
 
-        var arguments = $"swap {currentProcess.Id} {currentProcessPath}";
+        var arguments = $"swap {currentProcess.Id} {AppContext.BaseDirectory}";
 
         var processStartInfo = new ProcessStartInfo(launcherPath, arguments);
 
