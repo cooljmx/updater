@@ -11,13 +11,8 @@ internal class ScheduledDownloadingSource : IScheduledDownloadingSource, ISchedu
 
     public Task Download => _downloadCompletionSource.Task;
 
-    public bool IsCompleted => _downloadCompletionSource.Task.IsCompleted;
-
-    public event Action? Completed;
-
     public void Complete()
     {
         _downloadCompletionSource.SetResult();
-        Completed?.Invoke();
     }
 }

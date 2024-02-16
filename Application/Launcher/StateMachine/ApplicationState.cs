@@ -8,6 +8,7 @@ internal enum ApplicationState
     CopyingToTarget,
     VersionChecking,
     MetadataPreparing,
-    Downloading,
+    DownloadPreparing,
+    DownloadContinuing,
     Launching,
 }

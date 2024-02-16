@@ -53,6 +53,6 @@ internal class MetadataPreparingApplicationStateStrategy : StateStrategy<Applica
 
         await scheduledDownloading.Download;
 
-        _applicationStateTransition.MoveTo(ApplicationState.Downloading);
+        _applicationStateTransition.MoveTo(ApplicationState.DownloadPreparing);
     }
 }
