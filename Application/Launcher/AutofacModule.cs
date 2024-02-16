@@ -43,5 +43,7 @@ public class AutofacModule : Module
         builder.RegisterType<MetadataPreparingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<DownloadContinuingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<DownloadPreparingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
+        builder.RegisterType<SwapStartingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
+        builder.RegisterType<ShutdownApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
     }
 }

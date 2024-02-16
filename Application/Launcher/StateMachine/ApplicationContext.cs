@@ -1,8 +1,22 @@
 ﻿namespace Launcher.StateMachine;
 
-internal class ApplicationContext : IApplicationContext
+internal class ApplicationContext : IApplicationContext, IDisposable
 {
+    private readonly CancellationTokenSource _cancellationTokenSource;
     private readonly Dictionary<string, object> _values = new();
+
+    public ApplicationContext()
+    {
+        _cancellationTokenSource = new CancellationTokenSource();
+        ShutdownCancellationToken = _cancellationTokenSource.Token;
+    }
+
+    public CancellationToken ShutdownCancellationToken { get; }
+
+    public async Task ShutdownAsync()
+    {
+        await _cancellationTokenSource.CancelAsync();
+    }
 
     public TValue GetValue<TValue>(string key)
         where TValue : notnull
@@ -21,5 +35,10 @@ internal class ApplicationContext : IApplicationContext
     {
         if (!_values.TryAdd(key, value))
             throw new InvalidOperationException();
+    }
+
+    public void Dispose()
+    {
+        _cancellationTokenSource.Dispose();
     }
 }

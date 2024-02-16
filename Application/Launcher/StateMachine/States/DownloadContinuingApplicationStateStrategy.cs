@@ -31,5 +31,9 @@ internal class DownloadContinuingApplicationStateStrategy : StateStrategy<Applic
 
             _applicationStateTransition.MoveTo(ApplicationState.DownloadContinuing);
         }
+        else
+        {
+            _applicationStateTransition.MoveTo(ApplicationState.SwapStarting);
+        }
     }
 }

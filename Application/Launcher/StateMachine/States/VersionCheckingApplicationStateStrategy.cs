@@ -28,13 +28,17 @@ internal class VersionCheckingApplicationStateStrategy : StateStrategy<Applicati
     {
         var (version, id) = await _remoteVersionProvider.GetAsync();
 
-        _applicationContext.SetValue("updateId", id);
-
         var currentVersion = _localVersionProvider.Get();
 
         if (version > currentVersion)
+        {
+            _applicationContext.SetValue("updateId", id);
+
             _applicationStateTransition.MoveTo(ApplicationState.MetadataPreparing);
+        }
         else
+        {
             _applicationStateTransition.MoveTo(ApplicationState.Launching);
+        }
     }
 }

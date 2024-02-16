@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Launcher;
+using Launcher.StateMachine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -21,4 +22,6 @@ builder.Services.AddHttpClient();
 
 var host = builder.Build();
 
-await host.RunAsync();
+var applicationContext = host.Services.GetRequiredService<IApplicationContext>();
+
+await host.RunAsync(applicationContext.ShutdownCancellationToken);

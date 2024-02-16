@@ -2,6 +2,10 @@
 
 public interface IApplicationContext
 {
+    CancellationToken ShutdownCancellationToken { get; }
+
+    Task ShutdownAsync();
+
     TValue GetValue<TValue>(string key)
         where TValue : notnull;
 
