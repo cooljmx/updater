@@ -11,7 +11,6 @@ internal class MetadataPreparingApplicationStateStrategy : StateStrategy<Applica
     private readonly IBaseAddressProvider _baseAddressProvider;
     private readonly IDownloadingScheduler _downloadingScheduler;
     private readonly IFolderProvider _folderProvider;
-    private IScheduledDownloading _scheduledDownloading;
 
     public MetadataPreparingApplicationStateStrategy(
         IFolderProvider folderProvider,
@@ -29,7 +28,7 @@ internal class MetadataPreparingApplicationStateStrategy : StateStrategy<Applica
 
     public override ApplicationState State => ApplicationState.MetadataPreparing;
 
-    protected override Task DoEnterAsync()
+    protected override async Task DoEnterAsync()
     {
         var updateId = _applicationContext.GetValue<Guid>("updateId");
 
@@ -47,28 +46,13 @@ internal class MetadataPreparingApplicationStateStrategy : StateStrategy<Applica
 
         var baseAddress = _baseAddressProvider.Get();
 
-        _scheduledDownloading = _downloadingScheduler.Schedule(
+        var scheduledDownloading = _downloadingScheduler.Schedule(
             new Uri($"{baseAddress}{updateId}/metadata.json"),
             metadataFileName,
             string.Empty);
 
-        _scheduledDownloading.Completed += OnCompleted;
+        await scheduledDownloading.Download;
 
-        if (_scheduledDownloading.IsCompleted)
-            OnCompleted();
-
-        return Task.CompletedTask;
-    }
-
-    private void OnCompleted()
-    {
         _applicationStateTransition.MoveTo(ApplicationState.Downloading);
-    }
-
-    protected override Task DoExitAsync()
-    {
-        _scheduledDownloading.Completed -= OnCompleted;
-
-        return Task.CompletedTask;
     }
 }

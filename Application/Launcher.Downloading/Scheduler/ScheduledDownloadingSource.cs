@@ -2,23 +2,22 @@
 
 internal class ScheduledDownloadingSource : IScheduledDownloadingSource, IScheduledDownloading
 {
-    private bool _isCompleted;
+    private readonly TaskCompletionSource _downloadCompletionSource;
 
-    public bool IsCompleted
+    public ScheduledDownloadingSource()
     {
-        get => _isCompleted;
-        private set
-        {
-            _isCompleted = value;
-
-            Completed?.Invoke();
-        }
+        _downloadCompletionSource = new TaskCompletionSource();
     }
+
+    public Task Download => _downloadCompletionSource.Task;
+
+    public bool IsCompleted => _downloadCompletionSource.Task.IsCompleted;
 
     public event Action? Completed;
 
     public void Complete()
     {
-        IsCompleted = true;
+        _downloadCompletionSource.SetResult();
+        Completed?.Invoke();
     }
 }
