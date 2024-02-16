@@ -26,11 +26,15 @@ internal class DownloadingScheduler : IDownloadingScheduler, IDownloadingBackgro
         return Task.CompletedTask;
     }
 
-    public void Schedule(Uri source, string target, string checkSum)
+    public IScheduledDownloading Schedule(Uri source, string target, string checkSum)
     {
-        var info = new DownloadingScheduleInfo(source, target, checkSum);
+        var scheduledDownloadingSource = new ScheduledDownloadingSource();
+
+        var info = new DownloadingScheduleInfo(source, target, checkSum, scheduledDownloadingSource);
 
         _queue.Enqueue(info);
+
+        return scheduledDownloadingSource;
     }
 
     private void OnTick(object? state)
@@ -42,7 +46,7 @@ internal class DownloadingScheduler : IDownloadingScheduler, IDownloadingBackgro
         try
         {
             if (_queue.TryDequeue(out var info))
-                _downloader.Download(info.Source, info.TargetFileName, info.CheckSum);
+                _downloader.Download(info.Source, info.TargetFileName, info.CheckSum, info.ScheduledDownloadingSource);
         }
         finally
         {

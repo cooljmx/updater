@@ -8,6 +8,6 @@ public class AutofacModule : Module
     {
         base.Load(builder);
 
-        builder.RegisterType<MetadataProvider>().As<IMetadataProvider>().SingleInstance();
+        builder.RegisterType<LocalMetadataProvider>().As<ILocalMetadataProvider>().SingleInstance();
     }
 }

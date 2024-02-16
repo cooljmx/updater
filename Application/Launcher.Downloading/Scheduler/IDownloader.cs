@@ -2,5 +2,5 @@
 
 internal interface IDownloader
 {
-    void Download(Uri source, string targetPath, string checkSum);
+    void Download(Uri source, string targetPath, string checkSum, IScheduledDownloadingSource scheduledDownloadingSource);
 }

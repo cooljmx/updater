@@ -64,7 +64,7 @@ internal class ContinueDownloadingStateStrategy : StateStrategy<DownloadingState
         await _downloadFileMetadataService.UpdateFileAsync();
 
         if (finalSize == downloadedSize)
-            _downloadingStateTransition.MoveTo(DownloadingState.Completed);
+            _threadPool.ExecuteAsync(() => _downloadingStateTransition.MoveTo(DownloadingState.Completed), CancellationToken.None);
         else
             _threadPool.ExecuteAsync(() => _downloadingStateTransition.MoveTo(DownloadingState.Continue), CancellationToken.None);
     }

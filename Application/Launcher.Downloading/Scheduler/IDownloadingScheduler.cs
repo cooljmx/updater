@@ -2,5 +2,5 @@
 
 public interface IDownloadingScheduler
 {
-    void Schedule(Uri source, string target, string checkSum);
+    IScheduledDownloading Schedule(Uri source, string target, string checkSum);
 }

@@ -9,7 +9,7 @@ internal class ApplicationStateMachine : StateMachine<ApplicationState, IApplica
         IApplicationStateStrategyFactory applicationStateStrategyFactory,
         IThreadPool threadPool)
         : base(
-            ApplicationState.Created,
+            ApplicationState.Started,
             applicationStateTransition,
             applicationStateStrategyFactory,
             threadPool)

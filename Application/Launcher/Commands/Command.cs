@@ -2,5 +2,6 @@
 
 internal enum Command
 {
+    Regular,
     Swap,
 }

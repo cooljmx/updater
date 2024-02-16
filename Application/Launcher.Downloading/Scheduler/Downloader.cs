@@ -13,7 +13,7 @@ internal class Downloader : IDownloader
         _scopeRepository = scopeRepository;
     }
 
-    public void Download(Uri source, string targetPath, string checkSum)
+    public void Download(Uri source, string targetPath, string checkSum, IScheduledDownloadingSource scheduledDownloadingSource)
     {
         var id = Guid.NewGuid();
         var lifetimeScope = _scopeRepository.Add(id);
@@ -23,6 +23,7 @@ internal class Downloader : IDownloader
         downloadingContextUpdater.SetValue("source", source);
         downloadingContextUpdater.SetValue("targetPath", targetPath);
         downloadingContextUpdater.SetValue("checkSum", checkSum);
+        downloadingContextUpdater.SetValue("scheduledDownloadingSource", scheduledDownloadingSource);
 
         lifetimeScope.Resolve<IDownloadingStateMachine>();
     }

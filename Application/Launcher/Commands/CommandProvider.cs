@@ -16,13 +16,13 @@ internal class CommandProvider : ICommandProvider
         var arguments = _commandLineArgumentProvider.Get();
 
         if (arguments.Length < 2)
-            throw new InvalidOperationException();
+            return Command.Regular;
 
         var commandValue = arguments[1];
 
         if (string.Equals(commandValue, "swap", StringComparison.OrdinalIgnoreCase))
             return Command.Swap;
 
-        throw new InvalidOperationException();
+        return Command.Regular;
     }
 }
