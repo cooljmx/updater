@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Launcher;
-using Launcher.Downloading.Scheduler;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -17,7 +16,6 @@ builder.ConfigureContainer(
             containerBuilder.RegisterModule<Launcher.Common.AutofacModule>();
         }));
 
-builder.Services.AddHostedService(serviceProvider => serviceProvider.GetRequiredService<IDownloadingBackgroundService>());
 builder.Services.AddHostedService(serviceProvider => serviceProvider.GetRequiredService<IApplication>());
 builder.Services.AddHttpClient();
 

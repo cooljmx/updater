@@ -1,5 +1,5 @@
 ﻿using Launcher.Abstraction.StateMachine;
-using Launcher.Downloading.Scheduler;
+using Launcher.Downloading;
 
 namespace Launcher.StateMachine.States;
 
@@ -7,16 +7,16 @@ internal class DownloadContinuingApplicationStateStrategy : StateStrategy<Applic
 {
     private readonly IApplicationContext _applicationContext;
     private readonly IApplicationStateTransition _applicationStateTransition;
-    private readonly IDownloadingScheduler _downloadingScheduler;
+    private readonly IDownloader _downloader;
 
     public DownloadContinuingApplicationStateStrategy(
         IApplicationContext applicationContext,
-        IDownloadingScheduler downloadingScheduler,
-        IApplicationStateTransition applicationStateTransition)
+        IApplicationStateTransition applicationStateTransition,
+        IDownloader downloader)
     {
         _applicationContext = applicationContext;
-        _downloadingScheduler = downloadingScheduler;
         _applicationStateTransition = applicationStateTransition;
+        _downloader = downloader;
     }
 
     public override ApplicationState State => ApplicationState.DownloadContinuing;
@@ -27,9 +27,7 @@ internal class DownloadContinuingApplicationStateStrategy : StateStrategy<Applic
 
         if (downloadQueue.TryDequeue(out var item))
         {
-            var scheduledDownloading = _downloadingScheduler.Schedule(item.Source, item.TargetFileName, item.CheckSum);
-
-            await scheduledDownloading.Download;
+            await _downloader.DownloadAsync(item.Source, item.TargetFileName, item.CheckSum);
 
             _applicationStateTransition.MoveTo(ApplicationState.DownloadContinuing);
         }

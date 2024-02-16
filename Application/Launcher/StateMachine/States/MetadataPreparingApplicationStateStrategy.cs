@@ -1,5 +1,5 @@
 ﻿using Launcher.Abstraction.StateMachine;
-using Launcher.Downloading.Scheduler;
+using Launcher.Downloading;
 using Launcher.Environment;
 
 namespace Launcher.StateMachine.States;
@@ -9,21 +9,21 @@ internal class MetadataPreparingApplicationStateStrategy : StateStrategy<Applica
     private readonly IApplicationContext _applicationContext;
     private readonly IApplicationStateTransition _applicationStateTransition;
     private readonly IBaseAddressProvider _baseAddressProvider;
-    private readonly IDownloadingScheduler _downloadingScheduler;
+    private readonly IDownloader _downloader;
     private readonly IFolderProvider _folderProvider;
 
     public MetadataPreparingApplicationStateStrategy(
         IFolderProvider folderProvider,
         IApplicationContext applicationContext,
-        IDownloadingScheduler downloadingScheduler,
         IBaseAddressProvider baseAddressProvider,
-        IApplicationStateTransition applicationStateTransition)
+        IApplicationStateTransition applicationStateTransition,
+        IDownloader downloader)
     {
         _folderProvider = folderProvider;
         _applicationContext = applicationContext;
-        _downloadingScheduler = downloadingScheduler;
         _baseAddressProvider = baseAddressProvider;
         _applicationStateTransition = applicationStateTransition;
+        _downloader = downloader;
     }
 
     public override ApplicationState State => ApplicationState.MetadataPreparing;
@@ -46,12 +46,10 @@ internal class MetadataPreparingApplicationStateStrategy : StateStrategy<Applica
 
         var baseAddress = _baseAddressProvider.Get();
 
-        var scheduledDownloading = _downloadingScheduler.Schedule(
+        await _downloader.DownloadAsync(
             new Uri($"{baseAddress}{updateId}/metadata.json"),
             metadataFileName,
             string.Empty);
-
-        await scheduledDownloading.Download;
 
         _applicationStateTransition.MoveTo(ApplicationState.DownloadPreparing);
     }

@@ -1,6 +1,4 @@
 ﻿using Launcher.Abstraction.StateMachine;
-using Launcher.Downloading.Abstract;
-using Launcher.Downloading.Scheduler;
 
 namespace Launcher.Downloading.StateMachine.States;
 
@@ -26,8 +24,8 @@ internal class CompletedDownloadingStateStrategy : StateStrategy<DownloadingStat
         if (File.Exists(metadataFileName))
             File.Delete(metadataFileName);
 
-        var scheduledDownloadingSource = _downloadingContextProvider.GetValue<IScheduledDownloadingSource>("scheduledDownloadingSource");
-        scheduledDownloadingSource.Complete();
+        var taskCompletionSource = _downloadingContextProvider.GetValue<TaskCompletionSource>("taskCompletionSource");
+        taskCompletionSource.SetResult();
 
         var lifetimeScopeId = _downloadingContextProvider.GetValue<Guid>("lifetimeScopeId");
         _scopeRepository.Remove(lifetimeScopeId);
