@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace Launcher.Downloading.Abstract;
+namespace Launcher.Downloading;
 
 internal class ScopeRepository : IScopeRepository
 {

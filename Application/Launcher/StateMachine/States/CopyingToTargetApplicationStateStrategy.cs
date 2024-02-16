@@ -6,22 +6,25 @@ namespace Launcher.StateMachine.States;
 internal class CopyingToTargetApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
 {
     private readonly IApplicationContext _applicationContext;
-    private readonly IMetadataProvider _metadataProvider;
+    private readonly IApplicationStateTransition _applicationStateTransition;
+    private readonly ILocalMetadataProvider _localMetadataProvider;
 
     public CopyingToTargetApplicationStateStrategy(
         IApplicationContext applicationContext,
-        IMetadataProvider metadataProvider)
+        ILocalMetadataProvider localMetadataProvider,
+        IApplicationStateTransition applicationStateTransition)
     {
         _applicationContext = applicationContext;
-        _metadataProvider = metadataProvider;
+        _localMetadataProvider = localMetadataProvider;
+        _applicationStateTransition = applicationStateTransition;
     }
 
     public override ApplicationState State => ApplicationState.CopyingToTarget;
 
-    protected override Task DoEnterAsync()
+    protected override async Task DoEnterAsync()
     {
-        var currentDirectory = Environment.CurrentDirectory;
-        var metadata = _metadataProvider.Get(Path.Combine(currentDirectory, "metadata.json"));
+        var currentDirectory = AppContext.BaseDirectory;
+        var metadata = await _localMetadataProvider.GetAsync(Path.Combine(currentDirectory, "metadata.json"));
         var targetPath = _applicationContext.GetValue<string>("targetPath");
 
         FileDeepCopy("metadata.json", currentDirectory, targetPath);
@@ -33,7 +36,7 @@ internal class CopyingToTargetApplicationStateStrategy : StateStrategy<Applicati
             FileDeepCopy(relativeFileName, currentDirectory, targetPath);
         }
 
-        return Task.CompletedTask;
+        _applicationStateTransition.MoveTo(ApplicationState.OriginalLauncherStarting);
     }
 
     private static void FileDeepCopy(string fileName, string sourceDirectory, string targetDirectory)
@@ -49,6 +52,6 @@ internal class CopyingToTargetApplicationStateStrategy : StateStrategy<Applicati
         if (!Directory.Exists(targetFileDirectory) && targetFileDirectory is not null)
             Directory.CreateDirectory(targetFileDirectory);
 
-        File.Copy(sourceFileName, targetFileName);
+        File.Copy(sourceFileName, targetFileName, true);
     }
 }

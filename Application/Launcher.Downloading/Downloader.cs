@@ -1,8 +1,7 @@
 ﻿using Autofac;
-using Launcher.Downloading.Abstract;
 using Launcher.Downloading.StateMachine;
 
-namespace Launcher.Downloading.Scheduler;
+namespace Launcher.Downloading;
 
 internal class Downloader : IDownloader
 {
@@ -13,8 +12,9 @@ internal class Downloader : IDownloader
         _scopeRepository = scopeRepository;
     }
 
-    public void Download(Uri source, string targetPath, string checkSum)
+    public Task DownloadAsync(Uri source, string targetPath, string checkSum)
     {
+        var taskCompletionSource = new TaskCompletionSource();
         var id = Guid.NewGuid();
         var lifetimeScope = _scopeRepository.Add(id);
 
@@ -23,7 +23,10 @@ internal class Downloader : IDownloader
         downloadingContextUpdater.SetValue("source", source);
         downloadingContextUpdater.SetValue("targetPath", targetPath);
         downloadingContextUpdater.SetValue("checkSum", checkSum);
+        downloadingContextUpdater.SetValue("taskCompletionSource", taskCompletionSource);
 
         lifetimeScope.Resolve<IDownloadingStateMachine>();
+
+        return taskCompletionSource.Task;
     }
 }

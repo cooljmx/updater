@@ -1,6 +1,4 @@
 ﻿using Autofac;
-using Launcher.Downloading.Abstract;
-using Launcher.Downloading.Scheduler;
 using Launcher.Downloading.StateMachine;
 using Launcher.Downloading.StateMachine.States;
 
@@ -21,13 +19,7 @@ public class AutofacModule : Module
             .InstancePerLifetimeScope();
 
         builder.RegisterType<DownloadFileMetadataService>().As<IDownloadFileMetadataService>().InstancePerLifetimeScope();
-
         builder.RegisterType<Downloader>().As<IDownloader>().SingleInstance();
-        builder.RegisterType<DownloadingScheduler>()
-            .As<IDownloadingScheduler>()
-            .As<IDownloadingBackgroundService>()
-            .SingleInstance();
-
         builder.RegisterType<ContextInitializingDownloadingStateStrategy>().As<IDownloadingStateStrategy>().InstancePerDependency();
         builder.RegisterType<CheckSumValidatingDownloadingStateStrategy>().As<IDownloadingStateStrategy>().InstancePerDependency();
         builder.RegisterType<CompletedDownloadingStateStrategy>().As<IDownloadingStateStrategy>().InstancePerDependency();

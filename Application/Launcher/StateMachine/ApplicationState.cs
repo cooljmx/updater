@@ -2,9 +2,20 @@
 
 internal enum ApplicationState
 {
-    Created,
     Started,
+
     Swap,
     WaitingProcessFinished,
     CopyingToTarget,
+    OriginalLauncherStarting,
+
+    VersionChecking,
+
+    MetadataPreparing,
+    DownloadPreparing,
+    DownloadContinuing,
+    SwapStarting,
+
+    Launching,
+    Shutdown,
 }
