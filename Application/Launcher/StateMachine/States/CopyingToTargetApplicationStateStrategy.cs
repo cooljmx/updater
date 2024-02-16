@@ -6,14 +6,17 @@ namespace Launcher.StateMachine.States;
 internal class CopyingToTargetApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
 {
     private readonly IApplicationContext _applicationContext;
+    private readonly IApplicationStateTransition _applicationStateTransition;
     private readonly ILocalMetadataProvider _localMetadataProvider;
 
     public CopyingToTargetApplicationStateStrategy(
         IApplicationContext applicationContext,
-        ILocalMetadataProvider localMetadataProvider)
+        ILocalMetadataProvider localMetadataProvider,
+        IApplicationStateTransition applicationStateTransition)
     {
         _applicationContext = applicationContext;
         _localMetadataProvider = localMetadataProvider;
+        _applicationStateTransition = applicationStateTransition;
     }
 
     public override ApplicationState State => ApplicationState.CopyingToTarget;
@@ -32,6 +35,8 @@ internal class CopyingToTargetApplicationStateStrategy : StateStrategy<Applicati
 
             FileDeepCopy(relativeFileName, currentDirectory, targetPath);
         }
+
+        _applicationStateTransition.MoveTo(ApplicationState.OriginalLauncherStarting);
     }
 
     private static void FileDeepCopy(string fileName, string sourceDirectory, string targetDirectory)

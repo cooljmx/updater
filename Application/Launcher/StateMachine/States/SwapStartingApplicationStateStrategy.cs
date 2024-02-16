@@ -22,13 +22,13 @@ internal class SwapStartingApplicationStateStrategy : StateStrategy<ApplicationS
     {
         var temporaryFolder = _applicationContext.GetValue<string>("temporaryFolder");
 
-        var launcherPath = Path.Combine(temporaryFolder, "launcher.exe");
+        var launcherFileName = Path.Combine(temporaryFolder, "launcher.exe");
 
         var currentProcess = Process.GetCurrentProcess();
 
         var arguments = $"swap {currentProcess.Id} {AppContext.BaseDirectory}";
 
-        var processStartInfo = new ProcessStartInfo(launcherPath, arguments);
+        var processStartInfo = new ProcessStartInfo(launcherFileName, arguments);
 
         _ = Process.Start(processStartInfo);
 

@@ -7,6 +7,7 @@ internal enum ApplicationState
     Swap,
     WaitingProcessFinished,
     CopyingToTarget,
+    OriginalLauncherStarting,
 
     VersionChecking,
 
