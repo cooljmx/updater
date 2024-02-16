@@ -18,6 +18,10 @@ dotnet publish ..\Application\Launcher.Metadata.Indexer\Launcher.Metadata.Indexe
 
 ..\Application\Launcher.Metadata.Indexer\bin\publish\Launcher.Metadata.Indexer.exe ..\data\$id
 
+dotnet publish ..\Application\Launcher\Launcher.csproj -c Release -o ..\data --self-contained -p:PublishSingleFile=true /p:Version=0.0.0.0 /p:DebugSymbols=false /p:DebugType=None
+
+dotnet publish ..\Application\WebInstaller\WebInstaller.csproj -c Release -o ..\data
+
 $versionJson = @"
 {"Version":"$nextVersion","Id":"$id"}
 "@
