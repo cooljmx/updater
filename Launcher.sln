@@ -29,7 +29,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Launcher.Abstraction.StateM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Launcher.Common", "Application\Launcher.Common\Launcher.Common.csproj", "{6E798C02-9DC5-4679-9A90-AAAA3BB83861}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebInstaller", "Application\WebInstaller\WebInstaller.csproj", "{A5EB91E7-D0D8-4D15-A13D-B28172663A7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebInstaller", "Application\WebInstaller\WebInstaller.csproj", "{A5EB91E7-D0D8-4D15-A13D-B28172663A7F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{2FED6A12-01E8-46B0-A2CF-818768039882}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\publish.next.ps1 = scripts\publish.next.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
