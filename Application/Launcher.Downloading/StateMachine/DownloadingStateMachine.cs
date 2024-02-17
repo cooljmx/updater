@@ -2,7 +2,8 @@
 
 namespace Launcher.Downloading.StateMachine;
 
-internal class DownloadingStateMachine : StateMachine<DownloadingState, IDownloadingStateStrategy>, IDownloadingStateMachine
+internal class DownloadingStateMachine :
+    StateMachine<DownloadingState, IDownloadingStateStrategy, IDownloadingStateTransition, IDownloadingStateStrategyFactory>, IDownloadingStateMachine
 {
     public DownloadingStateMachine(
         IDownloadingStateTransition stateTransition,

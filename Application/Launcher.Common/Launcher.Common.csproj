@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Launcher.Abstraction.StateMachine\Launcher.Abstraction.StateMachine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Scope\" />
+  </ItemGroup>
+
 </Project>

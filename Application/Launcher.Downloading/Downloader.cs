@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Launcher.Common.Scope;
 using Launcher.Downloading.StateMachine;
 
 namespace Launcher.Downloading;

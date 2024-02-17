@@ -1,16 +1,18 @@
 ﻿namespace Launcher.Abstraction.StateMachine;
 
-public abstract class StateMachine<TState, TStateStrategy> : IStateMachine<TState>
+public abstract class StateMachine<TState, TStateStrategy, TStateTransition, TStateStrategyFactory> : IStateMachine<TState>
     where TState : notnull
     where TStateStrategy : IStateStrategy<TState>
+    where TStateTransition : IStateTransition<TState, TStateStrategy>
+    where TStateStrategyFactory : IStateStrategyFactory<TState, TStateStrategy>
 {
-    private readonly IStateTransition<TState, TStateStrategy> _stateTransition;
+    private readonly TStateTransition _stateTransition;
     private IStateStrategy<TState> _currentStateStrategy;
 
     protected StateMachine(
         TState initialState,
-        IStateTransition<TState, TStateStrategy> stateTransition,
-        IStateStrategyFactory<TState, TStateStrategy> stateStrategyFactory,
+        TStateTransition stateTransition,
+        TStateStrategyFactory stateStrategyFactory,
         IThreadPool threadPool)
     {
         _stateTransition = stateTransition;

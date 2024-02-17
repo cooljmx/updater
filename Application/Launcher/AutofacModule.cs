@@ -1,5 +1,8 @@
 ﻿using Autofac;
 using Launcher.Commands;
+using Launcher.Commands.Swap;
+using Launcher.Commands.Swap.StateMachine;
+using Launcher.Commands.Swap.StateMachine.States;
 using Launcher.Environment;
 using Launcher.StateMachine;
 using Launcher.StateMachine.States;
@@ -19,6 +22,7 @@ public class AutofacModule : Module
         builder.RegisterType<RemoteVersionProvider>().As<IRemoteVersionProvider>().SingleInstance();
         builder.RegisterType<BaseAddressProvider>().As<IBaseAddressProvider>().SingleInstance();
         builder.RegisterType<FolderProvider>().As<IFolderProvider>().SingleInstance();
+        builder.RegisterType<SwapHandler>().As<ISwapHandler>().SingleInstance();
 
         builder.RegisterType<ApplicationStateMachine>()
             .As<IApplicationStateMachine>()
@@ -47,5 +51,20 @@ public class AutofacModule : Module
         builder.RegisterType<ShutdownApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<LaunchingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<OriginalLauncherStartingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
+
+        builder.RegisterType<SwapContext>()
+            .As<ISwapContext>()
+            .As<IWriteableSwapContext>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<SwapStateStrategyFactory>().As<ISwapStateStrategyFactory>().InstancePerLifetimeScope();
+        builder.RegisterType<SwapStateMachine>().As<ISwapStateMachine>().InstancePerLifetimeScope();
+        builder.RegisterType<SwapStateTransition>().As<ISwapStateTransition>().InstancePerLifetimeScope();
+
+        builder.RegisterType<ContextPreparingSwapStateStrategy>().As<ISwapStateStrategy>().InstancePerDependency();
+        builder.RegisterType<WaitingProcessFinishedSwapStateStrategy>().As<ISwapStateStrategy>().InstancePerDependency();
+        builder.RegisterType<CopyingToTargetSwapStateStrategy>().As<ISwapStateStrategy>().InstancePerDependency();
+        builder.RegisterType<OriginalLauncherStartingSwapStateStrategy>().As<ISwapStateStrategy>().InstancePerDependency();
+        builder.RegisterType<CompletedSwapStateStrategy>().As<ISwapStateStrategy>().InstancePerDependency();
     }
 }

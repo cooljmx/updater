@@ -1,4 +1,5 @@
 ﻿using Launcher.Abstraction.StateMachine;
+using Launcher.Common.Scope;
 
 namespace Launcher.Downloading.StateMachine.States;
 
