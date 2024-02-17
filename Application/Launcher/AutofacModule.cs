@@ -34,15 +34,6 @@ public class AutofacModule : Module
         builder.RegisterType<ApplicationStateStrategyFactory>().As<IApplicationStateStrategyFactory>().SingleInstance();
 
         builder.RegisterType<StartedApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
-        builder.RegisterType<SwapApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
-        builder.RegisterType<WaitingProcessFinishedApplicationStateStrategy>()
-            .As<IApplicationStateStrategy>()
-            .InstancePerDependency();
-
-        builder.RegisterType<CopyingToTargetApplicationStateStrategy>()
-            .As<IApplicationStateStrategy>()
-            .InstancePerDependency();
-
         builder.RegisterType<VersionCheckingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<MetadataPreparingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<DownloadContinuingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
@@ -50,7 +41,6 @@ public class AutofacModule : Module
         builder.RegisterType<SwapStartingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<ShutdownApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
         builder.RegisterType<LaunchingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
-        builder.RegisterType<OriginalLauncherStartingApplicationStateStrategy>().As<IApplicationStateStrategy>().InstancePerDependency();
 
         builder.RegisterType<SwapContext>()
             .As<ISwapContext>()
