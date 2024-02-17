@@ -2,6 +2,7 @@
 using Launcher.Abstraction.StateMachine;
 using Launcher.Common.Cryptography;
 using Launcher.Common.Environment;
+using Launcher.Common.Scope;
 using Launcher.Common.Threading;
 
 namespace Launcher.Common;
@@ -13,5 +14,6 @@ public class AutofacModule : Module
         builder.RegisterType<CommandLineArgumentProvider>().As<ICommandLineArgumentProvider>().SingleInstance();
         builder.RegisterType<ThreadPoolWrapper>().As<IThreadPool>().SingleInstance();
         builder.RegisterType<CheckSumCalculator>().As<ICheckSumCalculator>().SingleInstance();
+        builder.RegisterType<ScopeRepository>().As<IScopeRepository>().SingleInstance();
     }
 }

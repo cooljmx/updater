@@ -2,7 +2,8 @@
 
 namespace Launcher.StateMachine;
 
-internal class ApplicationStateMachine : StateMachine<ApplicationState, IApplicationStateStrategy>, IApplicationStateMachine
+internal class ApplicationStateMachine :
+    StateMachine<ApplicationState, IApplicationStateStrategy, IApplicationStateTransition, IApplicationStateStrategyFactory>, IApplicationStateMachine
 {
     public ApplicationStateMachine(
         IApplicationStateTransition applicationStateTransition,

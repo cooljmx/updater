@@ -1,51 +1,47 @@
 ﻿using Launcher.Abstraction.StateMachine;
 using Launcher.Metadata;
 
-namespace Launcher.StateMachine.States;
+namespace Launcher.Commands.Swap.StateMachine.States;
 
-internal class CopyingToTargetApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
+internal class CopyingToTargetSwapStateStrategy : StateStrategy<SwapState>, ISwapStateStrategy
 {
-    private readonly IApplicationContext _applicationContext;
-    private readonly IApplicationStateTransition _applicationStateTransition;
     private readonly ILocalMetadataProvider _localMetadataProvider;
+    private readonly ISwapContext _swapContext;
+    private readonly ISwapStateTransition _swapStateTransition;
 
-    public CopyingToTargetApplicationStateStrategy(
-        IApplicationContext applicationContext,
+    public CopyingToTargetSwapStateStrategy(
+        ISwapContext swapContext,
         ILocalMetadataProvider localMetadataProvider,
-        IApplicationStateTransition applicationStateTransition)
+        ISwapStateTransition swapStateTransition)
     {
-        _applicationContext = applicationContext;
+        _swapContext = swapContext;
         _localMetadataProvider = localMetadataProvider;
-        _applicationStateTransition = applicationStateTransition;
+        _swapStateTransition = swapStateTransition;
     }
 
-    public override ApplicationState State => ApplicationState.CopyingToTarget;
+    public override SwapState State => SwapState.CopyingToTarget;
 
     protected override async Task DoEnterAsync()
     {
         var currentDirectory = AppContext.BaseDirectory;
         var metadata = await _localMetadataProvider.GetAsync(Path.Combine(currentDirectory, "metadata.json"));
-        var targetPath = _applicationContext.GetValue<string>("targetPath");
 
-        FileDeepCopy("metadata.json", currentDirectory, targetPath);
+        FileDeepCopy("metadata.json", currentDirectory, _swapContext.TargetPath);
 
         foreach (var metadataDto in metadata)
         {
             var relativeFileName = metadataDto.Url;
 
-            FileDeepCopy(relativeFileName, currentDirectory, targetPath);
+            FileDeepCopy(relativeFileName, currentDirectory, _swapContext.TargetPath);
         }
 
-        _applicationStateTransition.MoveTo(ApplicationState.OriginalLauncherStarting);
+        _swapStateTransition.MoveTo(SwapState.OriginalLauncherStarting);
     }
 
     private static void FileDeepCopy(string fileName, string sourceDirectory, string targetDirectory)
     {
         var sourceFileName = Path.Combine(sourceDirectory, fileName);
         var targetFileName = Path.Combine(targetDirectory, fileName);
-
-        Console.WriteLine($"source: {sourceFileName}");
-        Console.WriteLine($"target: {targetFileName}");
 
         var targetFileDirectory = Path.GetDirectoryName(targetFileName);
 

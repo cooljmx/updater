@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace Launcher.Downloading;
+namespace Launcher.Common.Scope;
 
 public interface IScopeRepository
 {

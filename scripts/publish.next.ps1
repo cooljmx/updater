@@ -8,6 +8,10 @@ $releaseNumber = [int]$versionParts[2]
 $buildNumber = [int]$versionParts[3]
 $nextBuildNumber = $buildNumber + 1
 
+if ($majorNumber -eq 0){
+	$majorNumber = 1
+}
+
 $nextVersion = "$majorNumber.$minorNumber.$releaseNumber.$nextBuildNumber"
 
 $id = [System.Guid]::NewGuid()

@@ -8,8 +8,6 @@ public class AutofacModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.RegisterType<ScopeRepository>().As<IScopeRepository>().SingleInstance();
-
         builder.RegisterType<DownloadingStateStrategyFactory>().As<IDownloadingStateStrategyFactory>().InstancePerLifetimeScope();
         builder.RegisterType<DownloadingStateTransition>().As<IDownloadingStateTransition>().InstancePerLifetimeScope();
         builder.RegisterType<DownloadingStateMachine>().As<IDownloadingStateMachine>().InstancePerLifetimeScope();

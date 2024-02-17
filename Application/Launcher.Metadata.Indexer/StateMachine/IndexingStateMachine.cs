@@ -2,7 +2,8 @@
 
 namespace Launcher.Metadata.Indexer.StateMachine;
 
-internal class IndexingStateMachine : StateMachine<IndexingState, IIndexingStateStrategy>, IIndexingStateMachine
+internal class IndexingStateMachine : StateMachine<IndexingState, IIndexingStateStrategy, IIndexingStateTransition, IIndexingStateStrategyFactory>,
+    IIndexingStateMachine
 {
     public IndexingStateMachine(
         IIndexingStateTransition stateTransition,

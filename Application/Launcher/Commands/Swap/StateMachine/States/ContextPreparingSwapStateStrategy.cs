@@ -1,25 +1,25 @@
 ﻿using Launcher.Abstraction.StateMachine;
 using Launcher.Common.Environment;
 
-namespace Launcher.StateMachine.States;
+namespace Launcher.Commands.Swap.StateMachine.States;
 
-internal class SwapApplicationStateStrategy : StateStrategy<ApplicationState>, IApplicationStateStrategy
+internal class ContextPreparingSwapStateStrategy : StateStrategy<SwapState>, ISwapStateStrategy
 {
-    private readonly IApplicationContext _applicationContext;
-    private readonly IApplicationStateTransition _applicationStateTransition;
     private readonly ICommandLineArgumentProvider _commandLineArgumentProvider;
+    private readonly ISwapStateTransition _swapStateTransition;
+    private readonly IWriteableSwapContext _writeableSwapContext;
 
-    public SwapApplicationStateStrategy(
+    public ContextPreparingSwapStateStrategy(
         ICommandLineArgumentProvider commandLineArgumentProvider,
-        IApplicationContext applicationContext,
-        IApplicationStateTransition applicationStateTransition)
+        IWriteableSwapContext writeableSwapContext,
+        ISwapStateTransition swapStateTransition)
     {
         _commandLineArgumentProvider = commandLineArgumentProvider;
-        _applicationContext = applicationContext;
-        _applicationStateTransition = applicationStateTransition;
+        _writeableSwapContext = writeableSwapContext;
+        _swapStateTransition = swapStateTransition;
     }
 
-    public override ApplicationState State => ApplicationState.Swap;
+    public override SwapState State => SwapState.ContextPreparing;
 
     protected override Task DoEnterAsync()
     {
@@ -37,10 +37,10 @@ internal class SwapApplicationStateStrategy : StateStrategy<ApplicationState>, I
         if (!int.TryParse(processIdValue, out var processId))
             throw new InvalidOperationException();
 
-        _applicationContext.SetValue("processId", processId);
-        _applicationContext.SetValue("targetPath", targetPath);
+        _writeableSwapContext.ProcessId = processId;
+        _writeableSwapContext.TargetPath = targetPath;
 
-        _applicationStateTransition.MoveTo(ApplicationState.WaitingProcessFinished);
+        _swapStateTransition.MoveTo(SwapState.WaitingProcessFinished);
 
         return Task.CompletedTask;
     }
